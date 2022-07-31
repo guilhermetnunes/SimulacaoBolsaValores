@@ -10,10 +10,10 @@ namespace SimulacaoBolsaValores.Testes
 {
     public class UnitTestes
     {
-        [Fact(DisplayName = "Deve trazer um número interiro entre 1 e 100.")]
+        [Fact(DisplayName = "Deve trazer um número inteiro entre 1 e 100.")]
         public void DeveGerarNumeroInteiroAleatorioEntre0e100()
         {
-            var numero = new Ativo().GerarNumeroInteiroAleatorioEntre0e100();
+            var numero = new AtivoContext().GerarNumeroInteiroAleatorioEntre0e100();
 
             Assert.Equal(0, numero);
         }

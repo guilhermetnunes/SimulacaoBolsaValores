@@ -19,12 +19,6 @@
                 <Setter Property="Background" Value="#2b3240"/>
             </Style>
 
-            <Style x:Key="firstColor_GridViewColumn" TargetType="GridViewColumnHeader">
-            <Setter Property="Background" Value="#2b3240"/>
-            </Style>
-
-            
-
         </ResourceDictionary>
 
     </Application.Resources>

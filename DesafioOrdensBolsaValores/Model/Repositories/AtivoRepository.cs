@@ -10,20 +10,33 @@ namespace SimulacaoBolsaValores.Model.Repositories
 {
     public class AtivoRepository
     {
+        private IContext _context;
+        public Action<AtivoEntity> NovoAtivo { get; set; }
+
+        public AtivoRepository(IContext Context) 
+        { 
+            this._context = Context;
+        }
+
         public List<AtivoEntity> GerarListadeAtivos(int pQtd)
-        {
-            IContext ativo = new AtivoContext();
-            return ativo.GerarListadeAtivos(pQtd);
+        {            
+            return _context.GerarListadeAtivos(pQtd);
         }
-        public List<AtivoEntity> CleanAtivos()
+
+        public void AddAtivos(string pAtivoDigitado)
         {
-            IContext ativo = new AtivoContext();
-            return ativo.CleanAtivos();
+            NovoAtivo.Invoke(_context.AddAtivo(pAtivoDigitado));
         }
-        public List<AtivoEntity> AddAtivos(string pAtivoDigitado, List<AtivoEntity> pLstAtual)
+
+        public List<AtivoEntity> UpdateAtivos()
         {
-            IContext ativo = new AtivoContext();
-            return ativo.AddAtivo(pAtivoDigitado, pLstAtual);
+            return _context.UpdateAtivos();
         }
+
+        public void LimparAtivos()
+        {
+            _context.LimparAtivos();
+        }
+
     }
 }

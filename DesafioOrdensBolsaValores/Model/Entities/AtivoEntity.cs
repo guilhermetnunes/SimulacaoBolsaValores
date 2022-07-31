@@ -9,6 +9,7 @@ namespace SimulacaoBolsaValores.Model.Entities
 {
     public class AtivoEntity
     {
+        public Guid Id { get; set; }
         public DateTime DataHora { get; set; }
         public string Assessor { get; set; }
         public string Conta { get; set; }

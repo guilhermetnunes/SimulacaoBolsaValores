@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace SimulacaoBolsaValores.DataContext
 {
-    interface IContext
+    public interface IContext
     {
-        List<AtivoEntity> GerarListadeAtivos(int pQtd);
-        List<AtivoEntity> CleanAtivos();
-        List<AtivoEntity> AddAtivo(string pAtivoDigitadp, List<AtivoEntity> pLstAtual);
+        List<AtivoEntity> GerarListadeAtivos(int pQtd);        
+        AtivoEntity AddAtivo(string pAtivoDigitado);
+        List<AtivoEntity> UpdateAtivos();
+        void LimparAtivos();
     }
 }
