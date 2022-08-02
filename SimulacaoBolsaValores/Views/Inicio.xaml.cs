@@ -1,6 +1,6 @@
 ﻿using SimulacaoBolsaValores._Services;
 using SimulacaoBolsaValores.DataContext;
-using SimulacaoBolsaValores.Model.Repositories;
+using SimulacaoBolsaValores.Services;
 using SimulacaoBolsaValores.ViewModels;
 using System.ComponentModel;
 using System.Windows;
@@ -14,13 +14,13 @@ namespace SimulacaoBolsaValores.Views
     /// </summary>
     public partial class Inicio : Page
     {
-        private GridViewColumnHeader lstViewSortCol = null;
-        private SortAdorner lstViewSortAdorner = null;
-
+        private GridViewColumnHeader? lstViewSortCol = null;
+        private SortAdorner? lstViewSortAdorner = null;
+        
         public Inicio()
         {
             InitializeComponent();
-            this.DataContext = new InicioViewModel(new AtivoRepository(new AtivoContext()));
+            this.DataContext = new InicioViewModel(new AtivoService(new DadosRepositorio(new RegistrosRepositorio())));
         }
 
         private void GridColumnHeader_Click(object sender, RoutedEventArgs e)

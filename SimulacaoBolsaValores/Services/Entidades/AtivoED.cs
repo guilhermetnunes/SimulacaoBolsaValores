@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimulacaoBolsaValores.Model.Entities
 {
-    public class AtivoEntity
+    public class AtivoED
     {
         public Guid Id { get; set; }
         public DateTime DataHora { get; set; }

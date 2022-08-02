@@ -97,7 +97,7 @@
                     <TextBlock Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Foreground="White" Text="{Binding TotalDisponivel}"/>
 
                     <!--grid-->
-                    <ListView Name="grdAtivos" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="15" ItemsSource="{Binding lstAtivos}" HorizontalContentAlignment="Center" Background="Transparent">
+                    <ListView Name="grdAtivos" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="15" ItemsSource="{Binding LstAtivos}" HorizontalContentAlignment="Center" Background="Transparent">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Width="120">

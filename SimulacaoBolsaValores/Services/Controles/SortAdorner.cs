@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace SimulacaoBolsaValores._Services
 {
-    public class SortAdorner : Adorner
+    public class SortAdorner : Adorner, ISortAdorner
     {
-        private static Geometry ascGeometry = Geometry.Parse("M 0 4 L 3.5 0 L 7 4 Z");
-        private static Geometry descGeometry = Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
-
+        private static Geometry _ascGeometry = Geometry.Parse("M 0 4 L 3.5 0 L 7 4 Z");
+        private static Geometry _descGeometry = Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
         public ListSortDirection Direction { get; private set; }
-
+        
         public SortAdorner(UIElement element, ListSortDirection dir) : base(element)
         {
             this.Direction = dir;
         }
-
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
@@ -33,12 +26,12 @@ namespace SimulacaoBolsaValores._Services
 
             drawingContext.PushTransform(transform);
 
-            Geometry geometry = ascGeometry;
+            Geometry geometry = _ascGeometry;
 
             if (this.Direction == ListSortDirection.Descending)
-                geometry = descGeometry;
+                geometry = _descGeometry;
 
-            drawingContext.DrawGeometry(Brushes.Black, null, geometry);
+            drawingContext.DrawGeometry(Brushes.White, null, geometry);
 
             drawingContext.Pop();
         }

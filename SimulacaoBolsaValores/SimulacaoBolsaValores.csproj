@@ -8,14 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DataContext\Interfaces\**" />
-    <EmbeddedResource Remove="DataContext\Interfaces\**" />
-    <None Remove="DataContext\Interfaces\**" />
-    <Page Remove="DataContext\Interfaces\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Model\Repositories\IAtivoRepository.cs" />
+    <Compile Remove="Repositorios\Interfaces\**" />
+    <EmbeddedResource Remove="Repositorios\Interfaces\**" />
+    <None Remove="Repositorios\Interfaces\**" />
+    <Page Remove="Repositorios\Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,10 +35,6 @@
   <ItemGroup>
     <PackageReference Include="xunit.assert" Version="2.4.1" />
     <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SimulacaoBolsaValores.Application\SimulacaoBolsaValores.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
