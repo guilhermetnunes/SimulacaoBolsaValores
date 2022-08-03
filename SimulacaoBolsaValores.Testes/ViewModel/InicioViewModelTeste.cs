@@ -23,6 +23,10 @@ namespace SimulacaoBolsaValores.Testes.ViewModel
 
         private Mock<IAtivoController> _mockAtivoController;
 
+        private AtivoController _ativoController;
+
+        private Mock<IDadosRepositorio> _mockDadosRepositorio;
+
 
         public InicioViewModelTeste()
         {
@@ -33,6 +37,10 @@ namespace SimulacaoBolsaValores.Testes.ViewModel
             _mockAtivoController = new Mock<IAtivoController>();
 
             _inicioViewModel = new InicioViewModel(_mockAtivoController.Object);
+
+            _mockDadosRepositorio = new Mock<IDadosRepositorio>();
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
         }
 
         [Fact (DisplayName = "Deve fazer a soma da coluna Qtd conforme itens da lista.")]
@@ -106,6 +114,21 @@ namespace SimulacaoBolsaValores.Testes.ViewModel
         }
 
         [Fact]
+        public void Limpar_ListaDeAtivosNula()
+        {
+            var exception = Assert.Throws<Exception>(() => _inicioViewModel.Limpar());
+            Assert.Equal("Não há dados para limpar.", exception.Message);
+        }
+
+        [Fact]
+        public void Limpar_ListaDeAtivosVazia()
+        {
+            _inicioViewModel.LstAtivos = new ObservableCollection<AtivoED>();
+            var exception = Assert.Throws<Exception>(() => _inicioViewModel.Limpar());
+            Assert.Equal("Não há dados para limpar.", exception.Message);
+        }
+
+        [Fact]
         public void Limpar_LimparListaDeAtivos()
         {
             ObservableCollection<AtivoED> listaAtivos = new ObservableCollection<AtivoED>();
@@ -124,11 +147,76 @@ namespace SimulacaoBolsaValores.Testes.ViewModel
         }
 
         [Fact]
-        public void Adicionar_InicializarSemQtdDigitada()
+        public void AdicionarAuto_InicializarSemQtdDigitada()
         {
             var exception = Assert.Throws<Exception>(() => _inicioViewModel.AdicionarAuto());
             Assert.Equal("Digite uma quantidade.", exception.Message);
         }
 
+        [Fact]
+        public void Adicionar_ComCodigoAtivo()
+        {
+            AtivoED Ativo = new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" };
+                        
+            _mockDadosRepositorio.Setup(x => x.AdicionarAtivo("PETR123")).Returns(Ativo);
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            _mockAtivoController.Setup(x => x.AdicionarAtivo("PETR123")).Returns(Ativo);
+
+            _inicioViewModel = new InicioViewModel(_mockAtivoController.Object);
+
+            _inicioViewModel.AtivoDigitado = "PETR123";
+            var resultado = _inicioViewModel.Adicionar();
+            Assert.NotNull(resultado);
+        }
+
+        [Fact]
+        public void AdicionarAuto_ComQtdDigitada()
+        {
+            List<AtivoED> listaAtivos = new List<AtivoED>();
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" });
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "ABCD456" });
+
+            _mockDadosRepositorio.Setup(x => x.AdicionarNovaListaAtivos(2)).Returns(listaAtivos);
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            _mockAtivoController.Setup(x => x.AdicionarNovaListaAtivos(2)).Returns(listaAtivos);
+
+            _inicioViewModel = new InicioViewModel(_mockAtivoController.Object);
+
+            _inicioViewModel.QtdAtivosDigitadaParaGerarAtomaticamente = 2;
+
+            var resultado = _inicioViewModel.AdicionarAuto();
+
+            Assert.True(resultado.Count == 2);
+
+        }
+
+        [Fact]
+        public void Atualizar_DeveRetornarNovoListadeAtivos()
+        {
+            List<AtivoED> listaAtivos = new List<AtivoED>();
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123", Qtd = 10 });
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "ABCD456", Qtd = 56 });
+
+            ObservableCollection<AtivoED> listaAtivosObs = new ObservableCollection<AtivoED>();
+            listaAtivosObs.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123", Qtd = 15 });
+            listaAtivosObs.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "ABCD456", Qtd = 45 });
+
+            _mockDadosRepositorio.Setup(x => x.AtualizarAtivos()).Returns(listaAtivos);
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            _mockAtivoController.Setup(x => x.AtualizarAtivos()).Returns(listaAtivos);
+
+            _inicioViewModel = new InicioViewModel(_mockAtivoController.Object);
+
+            _inicioViewModel.LstAtivos = listaAtivosObs;
+            var resultado = _inicioViewModel.Atualizar();
+
+            Assert.Equal(listaAtivosObs[0].Qtd, resultado[0].Qtd);
+        }        
     }
 }

@@ -88,9 +88,11 @@ namespace SimulacaoBolsaValores.DataContext
 
             return lstAtivos;
         }
-        public void LimparAtivos()
+        public bool LimparAtivos()
         {
             _dicionarioAtivos.Clear();
+            
+            return _dicionarioAtivos.Count() == 0;
         }
        
     }

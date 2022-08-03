@@ -9,9 +9,9 @@ namespace SimulacaoBolsaValores.Services
         Action<List<AtivoED>> NovaListaAtivosAction { get; set; }
         Action<AtivoED> NovoAtivoAction { get; set; }
 
-        void AdicionarAtivo(string pAtivoDigitado);
-        void AdicionarNovaListaAtivos(int pQtd);
+        AtivoED AdicionarAtivo(string pAtivoDigitado);
+        List<AtivoED> AdicionarNovaListaAtivos(int pQtd);
         List<AtivoED> AtualizarAtivos();
-        void LimparAtivos();
+        bool LimparAtivos();
     }
 }

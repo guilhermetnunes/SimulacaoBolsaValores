@@ -174,9 +174,6 @@ namespace SimulacaoBolsaValores.ViewModels
         {
             try
             {
-                //AtivoED novoAtivo = Adicionar();
-                //LstAtivos.Add(novoAtivo);
-
                 Adicionar();
                 AtualizarTotais();
             }
@@ -185,12 +182,12 @@ namespace SimulacaoBolsaValores.ViewModels
                 MessageBox.Show(string.Format("Não foi possível adicionar ativo.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
-        public void Adicionar()
+        public AtivoED Adicionar()
         {
             if (string.IsNullOrEmpty(AtivoDigitado))
                 throw new Exception("Digite o código do Ativo.");
             else
-                _ativoController.AdicionarAtivo(AtivoDigitado);
+                return _ativoController.AdicionarAtivo(AtivoDigitado);
         }
         
         [ExcludeFromCodeCoverage]
@@ -198,13 +195,6 @@ namespace SimulacaoBolsaValores.ViewModels
         {
             try
             {
-                //List<AtivoED> lstAtivos = AdicionarAuto();
-
-                //foreach (var item in lstAtivos)
-                //{
-                //    LstAtivos.Add(item);
-                //}
-
                 AdicionarAuto();
                 AtualizarTotais();
             }
@@ -214,12 +204,12 @@ namespace SimulacaoBolsaValores.ViewModels
             }
         }
 
-        public void AdicionarAuto()
+        public List<AtivoED> AdicionarAuto()
         {
             if (QtdAtivosDigitadaParaGerarAtomaticamente == 0)
                 throw new Exception("Digite uma quantidade.");
             else
-                _ativoController.AdicionarNovaListaAtivos(QtdAtivosDigitadaParaGerarAtomaticamente);
+                return _ativoController.AdicionarNovaListaAtivos(QtdAtivosDigitadaParaGerarAtomaticamente);
         }
         
         [ExcludeFromCodeCoverage]
@@ -235,7 +225,7 @@ namespace SimulacaoBolsaValores.ViewModels
             }
         }
 
-        private void Atualizar()
+        public ObservableCollection<AtivoED> Atualizar()
         {
             var lstAtivosAtualizados = _ativoController.AtualizarAtivos();
 
@@ -248,6 +238,8 @@ namespace SimulacaoBolsaValores.ViewModels
 
                 LstAtivos.Add(item);
             }
+
+            return LstAtivos;
         }
 
         public void AtualizarTotais() 

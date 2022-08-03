@@ -12,6 +12,6 @@ namespace SimulacaoBolsaValores.DataContext
         AtivoED AdicionarAtivo(string pAtivoDigitado);
         List<AtivoED> AdicionarNovaListaAtivos(int pQtd);        
         List<AtivoED> AtualizarAtivos();
-        void LimparAtivos();
+        bool LimparAtivos();
     }
 }

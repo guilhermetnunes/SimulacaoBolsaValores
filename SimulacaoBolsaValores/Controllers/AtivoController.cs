@@ -11,6 +11,11 @@ namespace SimulacaoBolsaValores.Services
     public class AtivoController : IAtivoController
     {
         private IDadosRepositorio _dadosRepositorio;
+        
+        public AtivoED Ativo { get; set; }
+        public List<AtivoED> LstAtivos { get; set; }
+
+        public bool LimpezaFeita { get; set; }
 
         public Action<AtivoED> NovoAtivoAction { get; set; }
         public Action<List<AtivoED>> NovaListaAtivosAction { get; set; }
@@ -20,23 +25,34 @@ namespace SimulacaoBolsaValores.Services
             _dadosRepositorio = DadosRepositorio;
         }
 
-        public void AdicionarAtivo(string pAtivoDigitado)
+        public AtivoED AdicionarAtivo(string pAtivoDigitado)
         {
-            NovoAtivoAction.Invoke(_dadosRepositorio.AdicionarAtivo(pAtivoDigitado));
+            Ativo = _dadosRepositorio.AdicionarAtivo(pAtivoDigitado);
+
+            NovoAtivoAction.Invoke(Ativo);
+
+            return Ativo;
         }
 
-        public void AdicionarNovaListaAtivos(int pQtd)
+        public List<AtivoED> AdicionarNovaListaAtivos(int pQtd)
         {
-            NovaListaAtivosAction.Invoke(_dadosRepositorio.AdicionarNovaListaAtivos(pQtd));
+            LstAtivos = _dadosRepositorio.AdicionarNovaListaAtivos(pQtd);
+
+            NovaListaAtivosAction.Invoke(LstAtivos);
+
+            return LstAtivos;
         }
         public List<AtivoED> AtualizarAtivos()
         {
-            return _dadosRepositorio.AtualizarAtivos();
-        }
-        public void LimparAtivos()
-        {
-            _dadosRepositorio.LimparAtivos();
-        }
+            LstAtivos = _dadosRepositorio.AtualizarAtivos();
 
+            return LstAtivos;
+        }
+        public bool LimparAtivos()
+        {
+            LimpezaFeita = _dadosRepositorio.LimparAtivos();
+
+            return LimpezaFeita;
+        }
     }
 }

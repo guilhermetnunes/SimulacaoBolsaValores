@@ -24,16 +24,70 @@ namespace SimulacaoBolsaValores.Testes.Controllers
             _ativoController = new AtivoController(_mockDadosRepositorio.Object);
         }
 
+        //Utilizado na Action
+        public void NovoItemAtivo(AtivoED obj){}
+        public void NovosItensAtivos(List<AtivoED> obj) { }
+
         [Fact]
-        public void AtualizarAtivos_DeveRetornarListadeAtivos()
+        public void AdicionarAtivo_DeveAdicionarUmNovoAtivo()
+        {
+            AtivoED Ativo = new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" };
+
+            _mockDadosRepositorio.Setup(x => x.AdicionarAtivo("PETR123")).Returns(Ativo);            
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            _ativoController.NovoAtivoAction += NovoItemAtivo;
+
+            var resultado = _ativoController.AdicionarAtivo("PETR123");            
+            Assert.NotNull(resultado);
+        }
+
+        [Fact]
+        public void AdicionarNovaListaAtivos_DeveRetornarListadeAtivos()
         {
             List<AtivoED> listaAtivos = new List<AtivoED>();
-            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123", Qtd = 10 });
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" });
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "ABCD456" });
+
+            _mockDadosRepositorio.Setup(x => x.AdicionarNovaListaAtivos(2)).Returns(listaAtivos);
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            _ativoController.NovaListaAtivosAction += NovosItensAtivos;
+
+            var resultado = _ativoController.AdicionarNovaListaAtivos(2);
+            Assert.True(resultado.Count == 2);
+        }
+
+        
+            [Fact]
+        public void AtualizarAtivos_DeveRetornarListadeAtivosAtualizada()
+        {
+            List<AtivoED> listaAtivos = new List<AtivoED>();
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" });
+            listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "ABCD456" });
 
             _mockDadosRepositorio.Setup(x => x.AtualizarAtivos()).Returns(listaAtivos);
 
-            var resultado = _ativoController.AtualizarAtivos();            
-            Assert.NotNull(resultado);
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            _ativoController.NovaListaAtivosAction += NovosItensAtivos;
+
+            var resultado = _ativoController.AtualizarAtivos();
+            Assert.True(resultado.Count == 2);
+        }
+
+
+        [Fact]
+        public void LimparAtivos_DeveEsvaviarLista()
+        {
+            _mockDadosRepositorio.Setup(x => x.LimparAtivos()).Returns(true);
+
+            _ativoController = new AtivoController(_mockDadosRepositorio.Object);
+
+            var retorno = _ativoController.LimparAtivos();
+            Assert.True(retorno);
         }
 
     }
