@@ -44,6 +44,7 @@
                     <Label Margin="0,0,10,0" Foreground="White">GERAR ATIVOS AUTOMATICAMENTE QTD:</Label>
                     <TextBox Margin="0,0,10,0" Width="50" MaxLength="10" VerticalContentAlignment="Center" Text="{Binding QtdAtivosDigitadaParaGerarAtomaticamente}"></TextBox>
                     <Button Padding="10,0" Command="{Binding AdicionarAutoICommand}">+</Button>
+                    <Label Foreground="White"> *Após iniciar o processamento, inclua mais ativos p/ aumentar a carga.</Label>
                 </StackPanel>
 
                 <Label Foreground="White" HorizontalAlignment="Right" FontStyle="Italic">CONTROLE DE PROCESSAMENTO</Label>

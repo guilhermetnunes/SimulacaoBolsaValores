@@ -19,18 +19,12 @@ namespace SimulacaoBolsaValores.Services
         {
             _dadosRepositorio = DadosRepositorio;
         }
-        //public AtivoED AdicionarAtivo(string pAtivoDigitado)
-        //{
-        //    return _dadosRepositorio.AdicionarAtivo(pAtivoDigitado);
-        //}
+
         public void AdicionarAtivo(string pAtivoDigitado)
         {
             NovoAtivoAction.Invoke(_dadosRepositorio.AdicionarAtivo(pAtivoDigitado));
         }
-        //public List<AtivoED> AdicionarNovaListaAtivos(int pQtd)
-        //{
-        //    return _dadosRepositorio.AdicionarNovaListaAtivos(pQtd);
-        //}
+
         public void AdicionarNovaListaAtivos(int pQtd)
         {
             NovaListaAtivosAction.Invoke(_dadosRepositorio.AdicionarNovaListaAtivos(pQtd));

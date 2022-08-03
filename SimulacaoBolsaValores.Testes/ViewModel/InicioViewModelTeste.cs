@@ -115,25 +115,6 @@ namespace SimulacaoBolsaValores.Testes.ViewModel
             _inicioViewModel.Limpar();
             Assert.Empty(listaAtivos);
         }
-        
-        [Fact]
-        public void Adicionar_InicializarComCodigoAtivo()
-        {
-            Assert.True(false);
-            //var lista = new List<string>();
-
-            //string codigoAtivo = "PETR123";
-            //_inicioViewModel.AtivoDigitado = codigoAtivo;
-
-            //AtivoED ativo = new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" };
-
-            //_mockAtivoController.Setup(x => x.AdicionarAtivo(It.IsAny<string>()))
-            //    .Callback<string>(s => lista.Add(s))
-            //    .Verifiable();
-
-            //_inicioViewModel.Adicionar();
-            //Assert.Single(_inicioViewModel.LstAtivos);
-        }
 
         [Fact]
         public void Adicionar_InicializarSemCodigoAtivo()
@@ -143,52 +124,11 @@ namespace SimulacaoBolsaValores.Testes.ViewModel
         }
 
         [Fact]
-        public void AdicionarAuto_InicializarComQtdDigitada()
-        {
-            Assert.True(false);
-            //List<AtivoED> listaAtivos = new List<AtivoED>();
-            //listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR123" });
-            //listaAtivos.Add(new AtivoED { Id = Guid.NewGuid(), Ativo = "PETR456" });
-
-            //_inicioViewModel.QtdAtivosDigitadaParaGerarAtomaticamente = 2;
-
-            //_mockAtivoController.Setup(x => x.AdicionarNovaListaAtivos(2)).Returns(listaAtivos);
-
-            //var resultado = _inicioViewModel.AdicionarAuto();
-            //Assert.Equal(2, resultado.Count);
-        }
-
-        [Fact]
         public void Adicionar_InicializarSemQtdDigitada()
         {
             var exception = Assert.Throws<Exception>(() => _inicioViewModel.AdicionarAuto());
             Assert.Equal("Digite uma quantidade.", exception.Message);
         }
-
-        [Fact]
-        public void AtualizarRegistros_DeveRetornarDadoDiferete()
-        {
-            Assert.True(false);
-            //Guid Id = Guid.NewGuid();
-            //AtivoED ativo = new AtivoED { Id = Id, Ativo = "PETR1234", Qtd = 10 };
-
-            //_dadosRepositorio.DicionarioAtivos = new System.Collections.Concurrent.ConcurrentDictionary<Guid, AtivoED>();            
-            //_dadosRepositorio.DicionarioAtivos.TryAdd(Id, ativo);
-
-            //List<AtivoED> listaAtivosAtual = new List<AtivoED>();
-            //listaAtivosAtual.Add(ativo);
-
-            //_inicioViewModel.LstAtivos = listaAtivosAtual;
-
-            //List<AtivoED> listaAtivosAtualizada = new List<AtivoED>();
-            //listaAtivosAtualizada.Add(new AtivoED { Id = Id, Ativo = "PETR123", Qtd = 20 });
-
-            //_mockAtivoController.Setup(x => x.AtualizarAtivos()).Returns(listaAtivosAtualizada);
-
-            //var resultado = _inicioViewModel.AtualizarRegistros();
-            //Assert.NotEqual(listaAtivosAtual[0].Qtd, listaAtivosAtualizada[0].Qtd);
-        }
-
 
     }
 }
