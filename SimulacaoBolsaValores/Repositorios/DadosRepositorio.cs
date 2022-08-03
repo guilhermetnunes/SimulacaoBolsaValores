@@ -23,6 +23,8 @@ namespace SimulacaoBolsaValores.DataContext
             if (string.IsNullOrEmpty(pAtivoDigitado))
                 throw new Exception("Nenhum ativo informado!");
 
+            int Qtd = _registrosRepositorio.GerarNumeroInteiroEntre0e100Aleatorio();
+
             var ativo = new AtivoED
             {   
                 Id = Guid.NewGuid(),
@@ -31,7 +33,7 @@ namespace SimulacaoBolsaValores.DataContext
                 Conta = "3934072", 
                 Ativo = pAtivoDigitado, 
                 Tipo = 'C', 
-                Qtd = _registrosRepositorio.GerarNumeroInteiroEntre0e100Aleatorio(), 
+                Qtd = Qtd, 
                 QtdAparente = _registrosRepositorio.GerarNumeroInteiroEntre0e100Aleatorio(), 
                 QtdDisp = _registrosRepositorio.GerarNumeroInteiroEntre0e100Aleatorio(), 
                 QtdCancel = _registrosRepositorio.GerarNumeroInteiroEntre0e100Aleatorio(), 
@@ -40,8 +42,9 @@ namespace SimulacaoBolsaValores.DataContext
                 ValorDisp = _registrosRepositorio.GerarNovoPrecoEntre0e100Aleatorio(), 
                 Objetivo = _registrosRepositorio.GerarNovoPrecoEntre0e100Aleatorio(), 
                 ObjDisp = _registrosRepositorio.GerarNovoPrecoEntre0e100Aleatorio(), 
-                Reducao = 0 
-            };
+                Reducao = 0,
+                StatusCor = _registrosRepositorio.BuscarCor(Qtd)
+        };
             
             _dicionarioAtivos.TryAdd(ativo.Id, ativo);
 
@@ -79,6 +82,7 @@ namespace SimulacaoBolsaValores.DataContext
                 ativo.ValorDisp = _registrosRepositorio.GerarNovoPrecoEntre0e100Aleatorio();
                 ativo.Objetivo = _registrosRepositorio.GerarNovoPrecoEntre0e100Aleatorio();
                 ativo.ObjDisp = _registrosRepositorio.GerarNovoPrecoEntre0e100Aleatorio();
+                ativo.StatusCor = _registrosRepositorio.BuscarCor(ativo.Qtd);
                 lstAtivos.Add(ativo);
             }            
 

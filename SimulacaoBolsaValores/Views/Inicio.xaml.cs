@@ -3,6 +3,7 @@ using SimulacaoBolsaValores.DataContext;
 using SimulacaoBolsaValores.Services;
 using SimulacaoBolsaValores.ViewModels;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -16,13 +17,15 @@ namespace SimulacaoBolsaValores.Views
     {
         private GridViewColumnHeader? lstViewSortCol = null;
         private SortAdorner? lstViewSortAdorner = null;
-        
+
+        [ExcludeFromCodeCoverage]
         public Inicio()
         {
             InitializeComponent();
-            this.DataContext = new InicioViewModel(new AtivoService(new DadosRepositorio(new RegistrosRepositorio())));
+            this.DataContext = new InicioViewModel(new AtivoController(new DadosRepositorio(new RegistrosRepositorio())));
         }
 
+        [ExcludeFromCodeCoverage]
         private void GridColumnHeader_Click(object sender, RoutedEventArgs e)
         {
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
@@ -43,6 +46,10 @@ namespace SimulacaoBolsaValores.Views
             lstViewSortAdorner = new SortAdorner(lstViewSortCol, newDir);
             AdornerLayer.GetAdornerLayer(lstViewSortCol).Add(lstViewSortAdorner);
             grdAtivos.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+        }
+
+        private void grdAtivos_Sorting(object sender, DataGridSortingEventArgs e)
+        {
 
         }
     }

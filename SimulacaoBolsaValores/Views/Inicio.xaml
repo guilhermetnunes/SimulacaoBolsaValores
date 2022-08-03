@@ -41,7 +41,7 @@
                     <TextBox Margin="10,0" Width="80" MaxLength="10" VerticalContentAlignment="Center" Text="{Binding AtivoDigitado}"></TextBox>
                     <Button Padding="10,0" Command="{Binding AdicionarICommand}">+</Button>
                     <Label Margin="10,0,0,0" Foreground="White">|||</Label>
-                    <Label Margin="10,0" Foreground="White">GERAR ATIVOS AUTOMATICAMENTE QTD:</Label>
+                    <Label Margin="0,0,10,0" Foreground="White">GERAR ATIVOS AUTOMATICAMENTE QTD:</Label>
                     <TextBox Margin="0,0,10,0" Width="50" MaxLength="10" VerticalContentAlignment="Center" Text="{Binding QtdAtivosDigitadaParaGerarAtomaticamente}"></TextBox>
                     <Button Padding="10,0" Command="{Binding AdicionarAutoICommand}">+</Button>
                 </StackPanel>
@@ -97,146 +97,217 @@
                     <TextBlock Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Foreground="White" Text="{Binding TotalDisponivel}"/>
 
                     <!--grid-->
-                    <ListView Name="grdAtivos" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="15" ItemsSource="{Binding LstAtivos}" HorizontalContentAlignment="Center" Background="Transparent">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Width="120">
-                                    <GridViewColumnHeader Tag="DataHora" Click="GridColumnHeader_Click"  Background="Transparent" Foreground="White">DATA E HORA</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding DataHora, StringFormat='dd/MM/yyyy HH:mm:ss'}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-
-                                <GridViewColumn Width="70">
-                                    <GridViewColumnHeader Tag="DataHora" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">ASSESSOR</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Assessor}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-
-                                <GridViewColumn Width="60">
-                                    <GridViewColumnHeader Tag="Conta" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">CONTA</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
+                    <DataGrid
+                            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="15"
+                            Background="Transparent"
+                            Name="grdAtivos"
+                            AutoGenerateColumns="False"
+                            SelectionUnit="FullRow"
+                            CanUserAddRows="False"
+                            CanUserReorderColumns="False"
+                            CanUserSortColumns="True"
+                            CanUserResizeColumns="False"
+                            ItemsSource="{Binding LstAtivos}"
+                            HeadersVisibility="Column">
+                        <DataGrid.Resources>
+                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="#161b2a" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Cursor" Value="Hand" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <MultiDataTrigger >
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=StatusCor}" Value="R" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="Red" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger >
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=StatusCor}" Value="Y" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger >
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=StatusCor}" Value="B" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter Property="Background" Value="Blue" />
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="120" Text="DATA E HORA"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Conta}" Foreground="White"/>
+                                        <TextBlock Text="{Binding DataHora, StringFormat='dd/MM/yyyy HH:mm:ss'}"/>
                                     </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>                                    
-                                    
-                                <GridViewColumn Width="50">
-                                    <GridViewColumnHeader Tag="Ativo" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">ATIVO</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Ativo}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="40">
-                                    <GridViewColumnHeader Tag="Tipo" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">TIPO</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Tipo}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="40">
-                                    <GridViewColumnHeader Tag="Qtd" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">QTD</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Qtd}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="95">
-                                    <GridViewColumnHeader Tag="QtdAparente" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">QTD.APARENTE</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding QtdAparente}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn  Width="60">
-                                    <GridViewColumnHeader Tag="QtdDisp" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">QTD.DISP</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                                <TextBlock Text="{Binding QtdDisp}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="80">
-                                    <GridViewColumnHeader Tag="QtdCancel" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">QTD.CANCEL</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding QtdCancel}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="65">
-                                    <GridViewColumnHeader Tag="QtdExec" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">QTD.EXEC</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding QtdExec}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="50">
-                                    <GridViewColumnHeader Tag="Valor" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">VALOR</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Valor}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                                <GridViewColumn Width="75">
-                                    <GridViewColumnHeader Tag="ValorDisp" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">VALOR DISP</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ValorDisp}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="60" >
-                                    <GridViewColumnHeader Tag="Objetivo" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">OBJETIVO</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Objetivo}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                
-                                <GridViewColumn Width="60">
-                                    <GridViewColumnHeader Tag="ObjDisp" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">OBJ.DISP</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ObjDisp}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="70" Text="ASSESSOR"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Assessor}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
 
-                                <GridViewColumn Width="65">
-                                    <GridViewColumnHeader Tag="Reducao" Click="GridColumnHeader_Click" Background="Transparent" Foreground="White">REDUÇÃO</GridViewColumnHeader>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Reducao}" Foreground="White"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="60" Text="CONTA"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Conta}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="60" Text="ATIVO"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Ativo}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="40" Text="TIPO"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Tipo}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="40" Text="QTD"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Qtd}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="95" Text="QTD.APARENTE"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding QtdAparente}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="60" Text="QTD.DISP"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding QtdDisp}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="80" Text="QTD.CANCEL"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding QtdCancel}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="65" Text="QTD.EXEC"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding QtdExec}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="50" Text="VALOR" HorizontalAlignment="Right"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ValorDisp}" HorizontalAlignment="Right"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="75" Text="VALOR DISP" HorizontalAlignment="Right"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ValorDisp}" HorizontalAlignment="Right"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="60" Text="OBJETIVO"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ValorDisp}" HorizontalAlignment="Right"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="60" Text="OBJ.DISP"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ObjDisp}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <TextBlock Width="63" Text="REDUÇÃO"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Reducao}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </StackPanel>
         </StackPanel>

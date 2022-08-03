@@ -24,6 +24,7 @@ namespace SimulacaoBolsaValores.Model.Entities
         public decimal ValorDisp { get; set; }
         public decimal Objetivo { get; set; }
         public decimal ObjDisp { get; set; }
-        public decimal Reducao { get; set; }        
+        public decimal Reducao { get; set; }
+        public char StatusCor { get; set; }
     }
 }

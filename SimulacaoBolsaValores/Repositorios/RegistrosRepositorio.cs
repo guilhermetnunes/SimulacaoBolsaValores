@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,15 @@ namespace SimulacaoBolsaValores.DataContext
             }
 
             return codigoAtivo;
+        }
+        public char BuscarCor(int numero)
+        {
+            if (numero < 33)
+                return 'R';
+            else if (numero < 66)
+                return 'Y';
+            else
+                return 'B';
         }
     }
 }

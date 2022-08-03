@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -6,15 +7,20 @@ using System.Windows.Media;
 namespace SimulacaoBolsaValores._Services
 {
     public class SortAdorner : Adorner, ISortAdorner
-    {
-        private static Geometry _ascGeometry = Geometry.Parse("M 0 4 L 3.5 0 L 7 4 Z");
-        private static Geometry _descGeometry = Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
-        public ListSortDirection Direction { get; private set; }
+    {        
+        private static readonly Geometry _ascGeometry = Geometry.Parse("M 0 4 L 3.5 0 L 7 4 Z");
+        private static readonly Geometry _descGeometry = Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
         
+        [ExcludeFromCodeCoverage]
+        public ListSortDirection Direction { get; private set; }
+
+        [ExcludeFromCodeCoverage]
         public SortAdorner(UIElement element, ListSortDirection dir) : base(element)
         {
             this.Direction = dir;
         }
+
+        [ExcludeFromCodeCoverage]
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);

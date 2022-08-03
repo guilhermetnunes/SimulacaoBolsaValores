@@ -8,21 +8,29 @@ using System.Threading.Tasks;
 
 namespace SimulacaoBolsaValores.Services
 {
-    public class AtivoService : IAtivoService
+    public class AtivoController : IAtivoController
     {
         private IDadosRepositorio _dadosRepositorio;
 
         public Action<AtivoED> NovoAtivoAction { get; set; }
         public Action<List<AtivoED>> NovaListaAtivosAction { get; set; }
 
-        public AtivoService(IDadosRepositorio DadosRepositorio)
+        public AtivoController(IDadosRepositorio DadosRepositorio)
         {
             _dadosRepositorio = DadosRepositorio;
         }
+        //public AtivoED AdicionarAtivo(string pAtivoDigitado)
+        //{
+        //    return _dadosRepositorio.AdicionarAtivo(pAtivoDigitado);
+        //}
         public void AdicionarAtivo(string pAtivoDigitado)
         {
             NovoAtivoAction.Invoke(_dadosRepositorio.AdicionarAtivo(pAtivoDigitado));
         }
+        //public List<AtivoED> AdicionarNovaListaAtivos(int pQtd)
+        //{
+        //    return _dadosRepositorio.AdicionarNovaListaAtivos(pQtd);
+        //}
         public void AdicionarNovaListaAtivos(int pQtd)
         {
             NovaListaAtivosAction.Invoke(_dadosRepositorio.AdicionarNovaListaAtivos(pQtd));

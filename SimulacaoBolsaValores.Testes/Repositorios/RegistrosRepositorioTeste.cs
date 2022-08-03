@@ -48,5 +48,29 @@ namespace SimulacaoBolsaValores.Testes.Services
             Assert.True(numeroValido);
         }
 
+        [Fact]
+        public void BuscarCor_DeveTrazerCorVermelha()
+        {
+            var charColor = _registrosRepositorio.BuscarCor(1);            
+
+            Assert.Equal('R',charColor);
+        }
+
+        [Fact]
+        public void BuscarCor_DeveTrazerCorAmarela()
+        {
+            var charColor = _registrosRepositorio.BuscarCor(50);
+
+            Assert.Equal('Y', charColor);
+        }
+
+        [Fact]
+        public void BuscarCor_DeveTrazerCorAzul()
+        {
+            var charColor = _registrosRepositorio.BuscarCor(80);
+
+            Assert.Equal('B', charColor);
+        }
+
     }
 }

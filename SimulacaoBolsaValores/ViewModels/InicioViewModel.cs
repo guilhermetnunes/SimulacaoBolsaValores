@@ -5,6 +5,7 @@ using SimulacaoBolsaValores.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -14,7 +15,7 @@ namespace SimulacaoBolsaValores.ViewModels
 {
     public class InicioViewModel : BaseViewModel
     {
-        private IAtivoService _ativoService;
+        private IAtivoController _ativoController;
 
         DispatcherTimer _timer;
 
@@ -28,7 +29,7 @@ namespace SimulacaoBolsaValores.ViewModels
         private int _tempoDigitado;
         public int TempoDigitado { get => _tempoDigitado; set => SetProperty(ref _tempoDigitado, value); }
         #endregion
-
+        
         #region Propriedades de Tela
         private ObservableCollection<AtivoED> _lstAtivos;
         public ObservableCollection<AtivoED> LstAtivos { get => _lstAtivos; set => SetProperty(ref _lstAtivos, value); }
@@ -38,10 +39,7 @@ namespace SimulacaoBolsaValores.ViewModels
 
         private bool _emStandby;
         public bool EmStandby { get => _emStandby; set => SetProperty(ref _emStandby, value); }
-
-        private bool _gerarAtivosAuto;
-        public bool GerarAtivosAuto { get => _gerarAtivosAuto; set => SetProperty(ref _gerarAtivosAuto, value); }
-
+        
         private int _totalQuantidade;
         public int TotalQuantidade { get => _totalQuantidade; set => SetProperty(ref _totalQuantidade, value); }
 
@@ -57,11 +55,11 @@ namespace SimulacaoBolsaValores.ViewModels
         public ICommand LimparICommand { get; set; }
         #endregion
 
-        public InicioViewModel(IAtivoService AtivoService)
+        public InicioViewModel(IAtivoController AtivoController)
         {   
-            this._ativoService = AtivoService;            
-            this._ativoService.NovoAtivoAction += NovoItemAtivo;
-            this._ativoService.NovaListaAtivosAction += NovosItensAtivos;
+            this._ativoController = AtivoController;
+            this._ativoController.NovoAtivoAction += NovoItemAtivo;
+            this._ativoController.NovaListaAtivosAction += NovosItensAtivos;
             this._timer = new DispatcherTimer();
 
             AdicionarICommand = new CommandBase(AdicionarAtivo);
@@ -73,19 +71,18 @@ namespace SimulacaoBolsaValores.ViewModels
             LstAtivos = new ObservableCollection<AtivoED>();
             AtivoDigitado = String.Empty;
             TempoDigitado = 1000;
-            GerarAtivosAuto = false;
             EmExecucao = false;
             EmStandby = true;
 
             _timer.Tick += Timer_Tick;
         }
-        private void NovoItemAtivo(AtivoED obj)
+        public void NovoItemAtivo(AtivoED obj)
         {
             LstAtivos.Add(obj);
             AtivoDigitado = "";
             AtualizarTotais();
         }
-        private void NovosItensAtivos(List<AtivoED> obj)
+        public void NovosItensAtivos(List<AtivoED> obj)
         {
             foreach (var item in obj)
             {
@@ -94,12 +91,24 @@ namespace SimulacaoBolsaValores.ViewModels
             AtivoDigitado = "";
             AtualizarTotais();
         }
-
+        
+        [ExcludeFromCodeCoverage]
         public void IniciarProcessamento(object obj)
         {
             try
             {
-                if ((LstAtivos == null || LstAtivos.Count() == 0) && !GerarAtivosAuto)
+                Processar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Não foi possível iniciar o processamento.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
+        public void Processar()
+        {
+            try
+            {
+                if (LstAtivos == null || LstAtivos.Count() == 0)
                     throw new Exception("Inclua um ou mais Ativos.");
                 else
                 {
@@ -110,101 +119,144 @@ namespace SimulacaoBolsaValores.ViewModels
                     _timer.Start();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(string.Format("Não foi possível iniciar o processamento.\n",ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                throw;
             }
         }
+        
+        [ExcludeFromCodeCoverage]
         public void PararProcessamento(object obj)
         {
             try
             {
-                _timer.Stop();
-
-                EmExecucao = false;
-                EmStandby = true;
+                Parar();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Não foi possível parar o processamento.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
+        public void Parar()
+        {
+            _timer.Stop();
+
+            EmExecucao = false;
+            EmStandby = true;
+        }
+
+        [ExcludeFromCodeCoverage]
         public void LimparAtivos(object obj)
         {
             try
             {
-                if ((LstAtivos == null || LstAtivos.Count() == 0))
-                    throw new Exception("Não há dados para limpar.");
-                else
-                {
-                    LstAtivos.Clear();
-                    _ativoService.LimparAtivos();
-                    AtualizarTotais();
-                }
+                Limpar();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Não foi possível limpar.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
+        public void Limpar()
+        {
+            if ((LstAtivos == null || LstAtivos.Count() == 0))
+                throw new Exception("Não há dados para limpar.");
+            else
+            {
+                LstAtivos.Clear();
+                _ativoController.LimparAtivos();
+                AtualizarTotais();
+            }
+        }
+        
+        [ExcludeFromCodeCoverage]
         public void AdicionarAtivo(object obj)
         {
             try
             {
-                if (string.IsNullOrEmpty(AtivoDigitado))
-                    throw new Exception("Digite o código do Ativo.");
-                else
-                    _ativoService.AdicionarAtivo(AtivoDigitado);
+                //AtivoED novoAtivo = Adicionar();
+                //LstAtivos.Add(novoAtivo);
+
+                Adicionar();
+                AtualizarTotais();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Não foi possível adicionar ativo.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
+        public void Adicionar()
+        {
+            if (string.IsNullOrEmpty(AtivoDigitado))
+                throw new Exception("Digite o código do Ativo.");
+            else
+                _ativoController.AdicionarAtivo(AtivoDigitado);
+        }
+        
+        [ExcludeFromCodeCoverage]
         public void AdicionarAtivoAuto(object obj)
         {
             try
             {
-                if (QtdAtivosDigitadaParaGerarAtomaticamente == 0)
-                    throw new Exception("Digite uma quantidade.");
-                else
-                {
-                    _ativoService.AdicionarNovaListaAtivos(QtdAtivosDigitadaParaGerarAtomaticamente);
+                //List<AtivoED> lstAtivos = AdicionarAuto();
 
-                    AtualizarTotais();
-                }
+                //foreach (var item in lstAtivos)
+                //{
+                //    LstAtivos.Add(item);
+                //}
+
+                AdicionarAuto();
+                AtualizarTotais();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Não foi possível adicionar ativos.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
+
+        public void AdicionarAuto()
+        {
+            if (QtdAtivosDigitadaParaGerarAtomaticamente == 0)
+                throw new Exception("Digite uma quantidade.");
+            else
+                _ativoController.AdicionarNovaListaAtivos(QtdAtivosDigitadaParaGerarAtomaticamente);
+        }
+        
+        [ExcludeFromCodeCoverage]
         public void AtualizarRegistros()
         {
             try
             {
-                var lstAtivosAtualizados = _ativoService.AtualizarAtivos();
-
-                foreach (var item in lstAtivosAtualizados)
-                {
-                    var itemListaAtual = (from a in LstAtivos.Where(x => x.Ativo == item.Ativo) select a).FirstOrDefault();
-
-                    if(itemListaAtual != null)
-                        LstAtivos.Remove(itemListaAtual);
-
-                    LstAtivos.Add(item);
-                }
+                Atualizar();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Não foi possível atualizar.\n", ex.Message), "Simulação da Bolsa de Valores", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
+
+        private void Atualizar()
+        {
+            var lstAtivosAtualizados = _ativoController.AtualizarAtivos();
+
+            foreach (var item in lstAtivosAtualizados)
+            {
+                var itemListaAtual = (from a in LstAtivos.Where(x => x.Ativo == item.Ativo) select a).FirstOrDefault();
+
+                if (itemListaAtual != null)
+                    LstAtivos.Remove(itemListaAtual);
+
+                LstAtivos.Add(item);
+            }
+        }
+
         public void AtualizarTotais() 
         {
             TotalQuantidade = LstAtivos.Sum(x => x.Qtd);
             TotalDisponivel = LstAtivos.Sum(x => x.QtdDisp);
         }
+        
+        [ExcludeFromCodeCoverage]
         private void Timer_Tick(object? sender, EventArgs e)
         {
             AtualizarRegistros();

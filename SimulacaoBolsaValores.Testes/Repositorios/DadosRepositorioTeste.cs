@@ -39,11 +39,25 @@ namespace SimulacaoBolsaValores.Testes.Services
         }
 
         [Fact]
+        public void AdicionarAtivo_NaoInformandoCodigoDoAtivo()
+        {
+            var exception = Assert.Throws<Exception>(() => _dadosRepositorio.AdicionarAtivo(""));
+            Assert.Equal("Nenhum ativo informado!", exception.Message);
+        }
+
+        [Fact]
         public void AdicionarNovaListaAtivos_RetornandoListaComMesmaQtdDeItensInformada()
         {
             _mockRegistrosRepositorio.Setup(x => x.GerarCodigoLetrasNumerosAleatorio()).Returns("AAA1234");
             var qtdItensLista = _dadosRepositorio.AdicionarNovaListaAtivos(5);            
             Assert.Equal(5, qtdItensLista.Count());
+        }
+
+        [Fact]
+        public void AdicionarNovaListaAtivos_NaoInformandoQtdDeItens()
+        {
+            var exception = Assert.Throws<Exception>(() => _dadosRepositorio.AdicionarNovaListaAtivos(0));
+            Assert.Equal("Nenhuma quantidade informada!", exception.Message);
         }
 
         [Fact]
