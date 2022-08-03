@@ -258,7 +258,7 @@
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ValorDisp}" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding Valor}" HorizontalAlignment="Right"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -280,7 +280,7 @@
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ValorDisp}" HorizontalAlignment="Right"/>
+                                        <TextBlock Text="{Binding Objetivo}" HorizontalAlignment="Right"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
